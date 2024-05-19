@@ -2,14 +2,15 @@ export interface IProduct {
 	id: string;
 	title: string;
 	description?: string;
-	price: number;
 	image: string;
+	price: number | null;
+	category: string;
 }
 
 export interface IBasket {
 	id: string;
 	title: string;
-	price: number;
+	price: number | null;
 	total: number;
 }
 
@@ -28,6 +29,7 @@ export interface IOrderForm {
 
 export interface IOrder extends IOrderForm {
 	items: string[];
+	total: number;
 }
 
 export interface IOrderResult {
