@@ -1,7 +1,7 @@
 import { Component } from "./base/Component";
 import { IProduct } from "../types";
 import { createElement, ensureElement } from "../utils/utils";
-import { settings } from '../utils/constants';
+import { categoryColorSettings } from '../utils/constants';
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
@@ -88,7 +88,7 @@ export class Card extends Component<ICard> {
 
 	set category(value: string) {
 		this.setText(this._category, value);
-		this._category.classList.add(settings[value])
+		this._category.classList.add(categoryColorSettings[value])
 	}
 
 	get category(): string {
