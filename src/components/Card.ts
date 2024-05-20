@@ -10,7 +10,7 @@ interface ICardActions {
 export interface ICard {
 	id: string;
 	title: string;
-	description?: string;
+	description: string;
 	image: string;
 	price: number | null;
 	category: string;
@@ -30,15 +30,15 @@ export class Card extends Component<ICard> {
 		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
 		this._image = ensureElement<HTMLImageElement>(`.${blockName}__image`, container);
 		this._button = container.querySelector(`.${blockName}__button`);
-		this._description = container.querySelector(`.${blockName}__description`);
+		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = ensureElement<HTMLElement>(`.${blockName}__price`, container);
 		this._category = ensureElement<HTMLElement>(`.${blockName}__category`, container);
 
 		if (actions?.onClick) {
 			if (this._button) {
-				this._button.addEventListener('click', actions.onClick);
+				this._button.addEventListener('mousedown', actions.onClick);
 			} else {
-				container.addEventListener('click', actions.onClick);
+				container.addEventListener('mousedown', actions.onClick);
 			}
 		}
 	}
@@ -63,16 +63,8 @@ export class Card extends Component<ICard> {
 		this.setImage(this._image, value, this.title);
 	}
 
-	set description(value: string | string[]) {
-		if (Array.isArray(value)) {
-			this._description.replaceWith(...value.map(str => {
-				const descTemplate = this._description.cloneNode() as HTMLElement;
-				this.setText(descTemplate, str);
-				return descTemplate;
-			}));
-		} else {
-			this.setText(this._description, value);
-		}
+	set description(value: string) {
+		this.setText(this._description, value);
 	}
 
 	set price(value: number | null) {
