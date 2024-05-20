@@ -12,6 +12,7 @@ export interface IBasket {
 	title: string;
 	price: number | null;
 	total: number;
+	items: HTMLElement[];
 }
 
 export interface IAppState {
