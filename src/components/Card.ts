@@ -8,6 +8,7 @@ interface ICardActions {
 }
 
 export interface ICard {
+	id: string;
 	title: string;
 	description?: string;
 	image: string;
@@ -76,19 +77,19 @@ export class Card extends Component<ICard> {
 
 	set price(value: number | null) {
 		if (value === null) {
-			this.setText(this._price, 'Бесценно')
+			this.setText(this._price, 'Бесценно');
 		} else {
 			this.setText(this._price, `${value} синапсов`);
 		}
 	}
 
-	// get price(): number {
-	// 	return this._price
-	// }
+	get price(): number | null {
+		return Number(this._price.textContent) || 0;
+	}
 
 	set category(value: string) {
 		this.setText(this._category, value);
-		this._category.classList.add(categoryColorSettings[value])
+		this._category.classList.add(categoryColorSettings[value]);
 	}
 
 	get category(): string {
