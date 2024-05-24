@@ -1,20 +1,7 @@
-import { Component } from "./base/Component";
-import { IProduct } from "../types";
-import { createElement, ensureElement } from "../utils/utils";
+import { Component } from './base/Component';
+import { ensureElement } from '../utils/utils';
 import { categoryColorSettings } from '../utils/constants';
-
-interface ICardActions {
-	onClick: (event: MouseEvent) => void;
-}
-
-export interface ICard {
-	id: string;
-	title: string;
-	description: string;
-	image: string;
-	price: number | null;
-	category: string;
-}
+import { ICard, IProductActions } from '../types';
 
 export class Card extends Component<ICard> {
 	protected _title: HTMLElement;
@@ -22,17 +9,17 @@ export class Card extends Component<ICard> {
 	protected _description?: HTMLElement;
 	protected _button?: HTMLButtonElement;
 	protected _price: HTMLElement;
-	protected _category: HTMLElement;
+	protected _category?: HTMLElement;
 
-	constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
+	constructor(protected blockName: string, container: HTMLElement, actions?: IProductActions) {
 		super(container);
 
 		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
-		this._image = ensureElement<HTMLImageElement>(`.${blockName}__image`, container);
+		this._image = container.querySelector(`.${blockName}__image`);
 		this._button = container.querySelector(`.${blockName}__button`);
 		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = ensureElement<HTMLElement>(`.${blockName}__price`, container);
-		this._category = ensureElement<HTMLElement>(`.${blockName}__category`, container);
+		this._category = container.querySelector(`.${blockName}__category`);
 
 		if (actions?.onClick) {
 			if (this._button) {
@@ -67,16 +54,19 @@ export class Card extends Component<ICard> {
 		this.setText(this._description, value);
 	}
 
-	set price(value: number | null) {
+	set price(value: number) {
 		if (value === null) {
 			this.setText(this._price, 'Бесценно');
+			this.setDisabled(this._button, true);
+			this.button = 'Нельзя купить';
 		} else {
 			this.setText(this._price, `${value} синапсов`);
+			this.setDisabled(this._button, false);
 		}
 	}
 
 	get price(): number | null {
-		return Number(this._price.textContent) || 0;
+		return Number(this._price.textContent);
 	}
 
 	set category(value: string) {
@@ -86,5 +76,9 @@ export class Card extends Component<ICard> {
 
 	get category(): string {
 		return this._category.textContent || '';
+	}
+
+	set button(value: string) {
+		this.setText(this._button, value)
 	}
 }
