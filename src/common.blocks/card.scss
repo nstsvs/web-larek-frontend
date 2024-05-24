@@ -8,6 +8,7 @@
   background-color: $primary;
   color: white;
   padding: $defaultPadding;
+  outline: none;
 
   &_full {
     flex-direction: row;
@@ -81,6 +82,8 @@
 
   }
   &__price {
-
+    font-size: 1.7rem;
+    line-height: 2rem;
+    font-weight: 400;
   }
 }
