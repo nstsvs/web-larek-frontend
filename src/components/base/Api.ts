@@ -19,6 +19,10 @@ export class Api {
         };
     }
 
+    protected _request(endPoint: string, options: RequestInit) {
+        return fetch(this.baseUrl + endPoint, options).then(this.handleResponse)
+    }
+
     protected handleResponse(response: Response): Promise<object> {
         if (response.ok) return response.json();
         else return response.json()
@@ -26,17 +30,17 @@ export class Api {
     }
 
     get(uri: string) {
-        return fetch(this.baseUrl + uri, {
+        return this._request(uri, {
             ...this.options,
             method: 'GET'
-        }).then(this.handleResponse);
+        });
     }
 
     post(uri: string, data: object, method: ApiPostMethods = 'POST') {
-        return fetch(this.baseUrl + uri, {
+        return this._request(uri, {
             ...this.options,
             method,
             body: JSON.stringify(data)
-        }).then(this.handleResponse);
+        });
     }
 }
