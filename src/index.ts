@@ -29,6 +29,9 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new OrderForm(cloneTemplate(orderTemplate), events);
 const contacts = new ContactsForm(cloneTemplate(contactsTemplate), events);
+const success = new Success(cloneTemplate(successTemplate), {
+	onClick: () => modal.close()
+});
 
 // Изменились элементы каталога
 events.on<CatalogChangeEvent>('items:changed', () => {
@@ -192,9 +195,6 @@ events.on('contacts:submit', () => {
 	api
 		.orderProducts(appData.order)
 		.then((res) => {
-			const success = new Success(cloneTemplate(successTemplate), {
-				onClick: () => modal.close()
-			});
 			appData.clearBasket();
 			page.counter = appData.basket.length;
 			modal.render({
