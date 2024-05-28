@@ -1,7 +1,7 @@
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
 import { WebLarekAPI } from './components/WebLarekApi';
-import { EventEmitter } from './components/base/events';
+import { EventEmitter } from './components/base/Events';
 import { AppState, CatalogChangeEvent } from './components/AppData';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { Card } from './components/Card';
