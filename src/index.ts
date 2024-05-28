@@ -205,9 +205,7 @@ events.on(AppEvents.ContactsSubmitted, () => {
 			});
 			events.emit(AppEvents.OrderSuccess, res);
 		})
-		.catch((err) => {
-			console.error(err);
-		});
+		.catch(console.error);
 });
 
 // Блокируем прокрутку страницы если открыта модалка
@@ -223,6 +221,4 @@ events.on(AppEvents.ModalClosed, () => {
 // Получаем товары с сервера
 api.getProductList()
 	.then(appData.setCatalog.bind(appData))
-	.catch((err) => {
-		console.error(err);
-	});
+	.catch(console.error);
