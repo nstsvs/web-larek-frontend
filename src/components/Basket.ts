@@ -18,7 +18,7 @@ export class Basket extends Component<IBasket> {
 
 		if (this._button) {
 			this._button.addEventListener('click', () => {
-				events.emit(AppEvents.OrderOpened);
+				events.emit(AppEvents.OrderOpen);
 			});
 		}
 

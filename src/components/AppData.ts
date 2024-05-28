@@ -34,17 +34,17 @@ export class AppState extends Model<IAppState> {
 
 	addToBasket(product: IProduct) {
 		this.basket.push(product);
-		this.emitChanges(AppEvents.BasketChanged);
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	removeFromBasket(product: IProduct) {
 		this.basket = this.basket.filter((item) => item.id !== product.id);
-		this.emitChanges(AppEvents.BasketChanged);
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	clearBasket() {
 		this.basket = [];
-		this.emitChanges(AppEvents.BasketChanged);
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	getTotal(): number {
@@ -53,14 +53,14 @@ export class AppState extends Model<IAppState> {
 
 	setCatalog(products: IProduct[]) {
 		this.catalog = products;
-		this.emitChanges(AppEvents.ItemsChanged, {
+		this.emitChanges(AppEvents.ItemsChange, {
 			catalog: this.catalog
 		});
 	}
 
 	setPreview(product: IProduct) {
 		this.preview = product.id;
-		this.emitChanges(AppEvents.PreviewChanged, product);
+		this.emitChanges(AppEvents.PreviewChange, product);
 	}
 
 	isProductInBasket(product: IProduct): boolean {
@@ -115,7 +115,7 @@ export class AppState extends Model<IAppState> {
 			errors.address = 'Введите адрес доставки';
 		}
 		this.formErrors = errors;
-		this.events.emit(AppEvents.AddressErrorsChanged, this.formErrors);
+		this.events.emit(AppEvents.AddressErrorsChange, this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
 
@@ -128,7 +128,7 @@ export class AppState extends Model<IAppState> {
 			errors.phone = 'Введите номер телефона';
 		}
 		this.formErrors = errors;
-		this.events.emit(AppEvents.ContactsErrorsChanged, this.formErrors);
+		this.events.emit(AppEvents.ContactsErrorsChange, this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
 }

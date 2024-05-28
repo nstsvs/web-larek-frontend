@@ -35,10 +35,10 @@ const success = new Success(cloneTemplate(successTemplate), {
 });
 
 // Изменились элементы каталога
-events.on<CatalogChangeEvent>(AppEvents.ItemsChanged, () => {
+events.on<CatalogChangeEvent>(AppEvents.ItemsChange, () => {
 	page.catalog = appData.catalog.map(item => {
 		const card = new Card('card', cloneTemplate(cardCatalogTemplate), {
-			onClick: () => events.emit(AppEvents.CardSelected, item)
+			onClick: () => events.emit(AppEvents.CardSelect, item)
 		});
 		return card.render({
 			id: item.id,
@@ -53,12 +53,12 @@ events.on<CatalogChangeEvent>(AppEvents.ItemsChanged, () => {
 });
 
 // Открытие карточки товара
-events.on(AppEvents.CardSelected, (item: IProduct) => {
+events.on(AppEvents.CardSelect, (item: IProduct) => {
 	appData.setPreview(item);
 });
 
 // Изменен открытый выбранный товар
-events.on(AppEvents.PreviewChanged, (item: IProduct) => {
+events.on(AppEvents.PreviewChange, (item: IProduct) => {
 		const card = new Card('card', cloneTemplate(cardPreviewTemplate), {
 			onClick: () => {
 				events.emit(AppEvents.CardBasket, item);
@@ -88,29 +88,29 @@ events.on(AppEvents.PreviewChanged, (item: IProduct) => {
 // Переключение кнопок в карточке
 events.on(AppEvents.CardBasket, (item: IProduct) => {
 	if (appData.basket.indexOf(item) === -1) {
-		events.emit(AppEvents.BasketAdded, item);
+		events.emit(AppEvents.BasketAdd, item);
 	} else {
-		events.emit(AppEvents.BasketRemoved, item);
+		events.emit(AppEvents.BasketRemove, item);
 	}
 });
 
 // Добавление товара в корзину
-events.on(AppEvents.BasketAdded, (item: IProduct) => {
+events.on(AppEvents.BasketAdd, (item: IProduct) => {
 	appData.addToBasket(item);
 });
 
 // Удаление товара из корзины
-events.on(AppEvents.BasketRemoved, (item: IProduct) => {
+events.on(AppEvents.BasketRemove, (item: IProduct) => {
 	appData.removeFromBasket(item);
 });
 
 // Размер корзины
-events.on(AppEvents.BasketChanged, () => {
+events.on(AppEvents.BasketChange, () => {
 	page.counter = appData.basket.length;
 });
 
 // Открытие корзины
-events.on(AppEvents.BasketOpened, () => {
+events.on(AppEvents.BasketOpen, () => {
 	basket.total = appData.getTotal();
 	modal.render({
 		content: basket.render({
@@ -120,11 +120,11 @@ events.on(AppEvents.BasketOpened, () => {
 });
 
 // Обновление корзины
-events.on(AppEvents.BasketChanged, () => {
+events.on(AppEvents.BasketChange, () => {
 	basket.items = appData.basket.map((item) => {
 		const card = new Card('card', cloneTemplate(cardBasketTemplate), {
 			onClick: () => {
-				events.emit(AppEvents.BasketRemoved, item);
+				events.emit(AppEvents.BasketRemove, item);
 			},
 		});
 		return card.render({
@@ -137,7 +137,8 @@ events.on(AppEvents.BasketChanged, () => {
 });
 
 // Открытие модального окна с адресом
-events.on(AppEvents.OrderOpened, () => {
+events.on(AppEvents.OrderOpen, () => {
+	console.log('OrderOpened event received');
 	modal.render({
 		content: order.render({
 			payment: '',
@@ -149,7 +150,8 @@ events.on(AppEvents.OrderOpened, () => {
 });
 
 // Открытие модального окна с контактными данными
-events.on(AppEvents.OrderSubmitted, () => {
+events.on(AppEvents.OrderSubmit, () => {
+	console.log('OrderSubmitted event received');
 	modal.render({
 		content: contacts.render({
 			phone: '',
@@ -162,19 +164,19 @@ events.on(AppEvents.OrderSubmitted, () => {
 });
 
 // Универсальный обработчик для изменений полей формы заказа
-events.on(AppEvents.AddressChanged, (data: { field: keyof IOrderAddress; value: string }) => {
+events.on(/^order\..*:change/, (data: { field: keyof IOrderAddress; value: string }) => {
 		appData.setOrderField(data.field, data.value);
 	}
 );
 
 // Универсальный обработчик для изменений полей формы контактов
-events.on(AppEvents.ContactsChanged, (data: { field: keyof IOrderContacts; value: string }) => {
+events.on(/^contacts\..*:change/, (data: { field: keyof IOrderContacts; value: string }) => {
 		appData.setContactsField(data.field, data.value);
 	}
 );
 
 // Отображение ошибок полей форм
-events.on(AppEvents.AddressErrorsChanged, (errors: Partial<IOrderAddress>) => {
+events.on(AppEvents.AddressErrorsChange, (errors: Partial<IOrderAddress>) => {
 	const { address, payment } = errors;
 	order.valid = !payment && !address;
 	order.errors = Object.values({ payment, address })
@@ -182,7 +184,7 @@ events.on(AppEvents.AddressErrorsChanged, (errors: Partial<IOrderAddress>) => {
 		.join('; ');
 });
 
-events.on(AppEvents.ContactsErrorsChanged, (errors: Partial<IOrderContacts>) => {
+events.on(AppEvents.ContactsErrorsChange, (errors: Partial<IOrderContacts>) => {
 	const { email, phone } = errors;
 	contacts.valid = !email && !phone;
 	contacts.errors = Object.values({ email, phone })
@@ -191,7 +193,7 @@ events.on(AppEvents.ContactsErrorsChanged, (errors: Partial<IOrderContacts>) => 
 });
 
 // Отправка заказа на сервер
-events.on(AppEvents.ContactsSubmitted, () => {
+events.on(AppEvents.ContactsSubmit, () => {
 	appData.setOrder();
 	api
 		.orderProducts(appData.order)
@@ -209,12 +211,12 @@ events.on(AppEvents.ContactsSubmitted, () => {
 });
 
 // Блокируем прокрутку страницы если открыта модалка
-events.on(AppEvents.ModalOpened, () => {
+events.on(AppEvents.ModalOpen, () => {
 	page.locked = true;
 });
 
 // ... и разблокируем
-events.on(AppEvents.ModalClosed, () => {
+events.on(AppEvents.ModalClose, () => {
 	page.locked = false;
 });
 

@@ -15,6 +15,7 @@ export class OrderForm extends Form<IOrderForm> {
 
 		this._buttons.forEach(button => {
 			button.addEventListener('click', () => {
+				console.log('Order form submitted');
 				this.class = button.name;
 			});
 		})

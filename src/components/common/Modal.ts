@@ -37,14 +37,14 @@ export class Modal extends Component<IModal> {
 	open() {
 		this._toggleModal();
 		document.addEventListener('keydown', this._handleEscape);
-		this.events.emit(AppEvents.ModalOpened);
+		this.events.emit(AppEvents.ModalOpen);
 	}
 
 	close() {
 		this._toggleModal(false);
 		document.removeEventListener('keydown', this._handleEscape);
 		this.content = null;
-		this.events.emit(AppEvents.ModalClosed);
+		this.events.emit(AppEvents.ModalClose);
 	}
 
 	render(data: IModal): HTMLElement {
