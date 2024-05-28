@@ -1,6 +1,6 @@
-import { Component } from '../base/Component';
-import { ensureElement } from '../../utils/utils';
-import { ISuccess, ISuccessActions } from '../../types';
+import { Component } from './base/Component';
+import { ensureElement } from '../utils/utils';
+import { ISuccess, ISuccessActions } from '../types';
 
 export class Success extends Component<ISuccess> {
 	protected _close: HTMLButtonElement;

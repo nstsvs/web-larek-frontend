@@ -8,10 +8,10 @@ import { Card } from './components/Card';
 import { Page } from './components/Page';
 import { IOrderAddress, IOrderContacts, IProduct } from './types';
 import { Modal } from './components/common/Modal';
-import { Basket } from './components/common/Basket';
+import { Basket } from './components/Basket';
 import { OrderForm } from './components/OrderForm';
 import { ContactsForm } from './components/ContactsForm';
-import { Success } from './components/common/Success';
+import { Success } from './components/Success';
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
