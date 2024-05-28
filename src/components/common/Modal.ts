@@ -1,7 +1,8 @@
 import { Component } from '../base/Component';
 import { ensureElement } from '../../utils/utils';
-import { IEvents } from '../base/events';
+import { IEvents } from '../base/Events';
 import { IModal } from '../../types';
+import { AppEvents } from '../../utils/enums';
 
 export class Modal extends Component<IModal> {
 	protected _closeButton: HTMLButtonElement;
@@ -22,23 +23,28 @@ export class Modal extends Component<IModal> {
 		this._content.replaceChildren(value);
 	}
 
-	open() {
-		this.container.classList.add('modal_active');
-		document.addEventListener('keydown', this._handleEscape.bind(this));
-		this.events.emit('modal:open');
+	private _toggleModal(state = true) {
+		this.toggleClass(this.container, 'modal_active', state);
 	}
 
-	close() {
-		this.container.classList.remove('modal_active');
-		document.removeEventListener('keydown', this._handleEscape.bind(this));
-		this.content = null;
-		this.events.emit('modal:close');
-	}
-
-	private _handleEscape(evt: KeyboardEvent) {
+	// Обработчик в виде стрелочного метода, чтобы не терять контекст `this`
+	private _handleEscape = (evt: KeyboardEvent) => {
 		if (evt.key === 'Escape') {
 			this.close();
 		}
+	}
+
+	open() {
+		this._toggleModal();
+		document.addEventListener('keydown', this._handleEscape);
+		this.events.emit(AppEvents.ModalOpen);
+	}
+
+	close() {
+		this._toggleModal(false);
+		document.removeEventListener('keydown', this._handleEscape);
+		this.content = null;
+		this.events.emit(AppEvents.ModalClose);
 	}
 
 	render(data: IModal): HTMLElement {

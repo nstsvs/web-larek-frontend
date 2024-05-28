@@ -1,9 +1,9 @@
 import { Form } from './common/Form';
 import { IOrderForm } from '../types';
-import { IEvents } from './base/events';
+import { IEvents } from './base/Events';
 import { ensureAllElements } from '../utils/utils';
 
-export class Order extends Form<IOrderForm> {
+export class OrderForm extends Form<IOrderForm> {
 	protected _address: HTMLInputElement;
 	protected _buttons: HTMLButtonElement[];
 
@@ -29,6 +29,6 @@ export class Order extends Form<IOrderForm> {
 	}
 
 	set address(value: string) {
-		(this.container.elements.namedItem('address') as HTMLInputElement).value = value;
+		this._address.value = value;
 	}
 }

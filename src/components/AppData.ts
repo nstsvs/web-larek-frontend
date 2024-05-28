@@ -8,6 +8,7 @@ import {
 	IOrderAddress,
 	IOrderContacts,
 } from '../types';
+import { AppEvents } from '../utils/enums';
 
 export type CatalogChangeEvent = {
 	catalog: IProduct[]
@@ -33,31 +34,33 @@ export class AppState extends Model<IAppState> {
 
 	addToBasket(product: IProduct) {
 		this.basket.push(product);
-		this.emitChanges('basket:change');
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	removeFromBasket(product: IProduct) {
 		this.basket = this.basket.filter((item) => item.id !== product.id);
-		this.emitChanges('basket:change');
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	clearBasket() {
 		this.basket = [];
-		this.emitChanges('basket:change');
+		this.emitChanges(AppEvents.BasketChange);
 	}
 
 	getTotal(): number {
-		return this.basket.reduce((a, c) => a + c.price, 0);
+		return this.basket.reduce((sum, item) => sum + item.price, 0);
 	}
 
 	setCatalog(products: IProduct[]) {
 		this.catalog = products;
-		this.emitChanges('items:changed', { catalog: this.catalog });
+		this.emitChanges(AppEvents.ItemsChange, {
+			catalog: this.catalog
+		});
 	}
 
 	setPreview(product: IProduct) {
 		this.preview = product.id;
-		this.emitChanges('preview:changed', product);
+		this.emitChanges(AppEvents.PreviewChange, product);
 	}
 
 	isProductInBasket(product: IProduct): boolean {
@@ -92,14 +95,14 @@ export class AppState extends Model<IAppState> {
 	setOrderField(field: keyof IOrderAddress, value: string) {
 		this.order[field] = value;
 		if (this.validateOrderPaymentMethod()) {
-			this.events.emit('order:ready', this.order);
+			this.events.emit(AppEvents.OrderReady, this.order);
 		}
 	}
 
 	setContactsField(field: keyof IOrderContacts, value: string) {
 		this.order[field] = value;
 		if (this.validateOrderContacts()) {
-			this.events.emit('order:ready', this.order);
+			this.events.emit(AppEvents.OrderReady, this.order);
 		}
 	}
 
@@ -112,7 +115,7 @@ export class AppState extends Model<IAppState> {
 			errors.address = 'Введите адрес доставки';
 		}
 		this.formErrors = errors;
-		this.events.emit('addressErrors:change', this.formErrors);
+		this.events.emit(AppEvents.AddressErrorsChange, this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
 
@@ -125,7 +128,7 @@ export class AppState extends Model<IAppState> {
 			errors.phone = 'Введите номер телефона';
 		}
 		this.formErrors = errors;
-		this.events.emit('contactsErrors:change', this.formErrors);
+		this.events.emit(AppEvents.ContactsErrorsChange, this.formErrors);
 		return Object.keys(errors).length === 0;
 	}
 }

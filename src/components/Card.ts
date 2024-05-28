@@ -23,9 +23,9 @@ export class Card extends Component<ICard> {
 
 		if (actions?.onClick) {
 			if (this._button) {
-				this._button.addEventListener('mousedown', actions.onClick);
+				this._button.addEventListener('click', actions.onClick);
 			} else {
-				container.addEventListener('mousedown', actions.onClick);
+				container.addEventListener('click', actions.onClick);
 			}
 		}
 	}
@@ -57,11 +57,11 @@ export class Card extends Component<ICard> {
 	set price(value: number) {
 		if (value === null) {
 			this.setText(this._price, 'Бесценно');
-			this.setDisabled(this._button, true);
+			this.toggleButton(true)
 			this.button = 'Нельзя купить';
 		} else {
 			this.setText(this._price, `${value} синапсов`);
-			this.setDisabled(this._button, false);
+			this.toggleButton(false);
 		}
 	}
 
@@ -71,7 +71,7 @@ export class Card extends Component<ICard> {
 
 	set category(value: string) {
 		this.setText(this._category, value);
-		this._category.classList.add(categoryColorSettings[value]);
+		this.toggleClass(this._category, `card__category_${categoryColorSettings[value]}`);
 	}
 
 	get category(): string {
@@ -80,5 +80,9 @@ export class Card extends Component<ICard> {
 
 	set button(value: string) {
 		this.setText(this._button, value)
+	}
+
+	toggleButton(state: boolean) {
+		this.setDisabled(this._button, state);
 	}
 }

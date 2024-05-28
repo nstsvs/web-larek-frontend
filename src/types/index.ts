@@ -78,7 +78,6 @@ export interface IOrderForm {
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
 export interface ISuccess {
-	id: string;
 	total: number;
 }
 
