@@ -2,7 +2,7 @@ import { Form } from './common/Form';
 import { IOrderForm } from '../types';
 import { IEvents } from './base/Events';
 
-export class Contacts extends Form<IOrderForm> {
+export class ContactsForm extends Form<IOrderForm> {
 	constructor(container: HTMLFormElement, events: IEvents) {
 		super(container, events);
 	}

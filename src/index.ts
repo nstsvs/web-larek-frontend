@@ -9,8 +9,8 @@ import { Page } from './components/Page';
 import { IOrderAddress, IOrderContacts, IProduct } from './types';
 import { Modal } from './components/common/Modal';
 import { Basket } from './components/common/Basket';
-import { Order } from './components/Order';
-import { Contacts } from './components/Contacts';
+import { OrderForm } from './components/OrderForm';
+import { ContactsForm } from './components/ContactsForm';
 import { Success } from './components/common/Success';
 
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
@@ -27,8 +27,8 @@ const appData = new AppState({}, events);
 const page = new Page(document.body, events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
-const order = new Order(cloneTemplate(orderTemplate), events);
-const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
+const order = new OrderForm(cloneTemplate(orderTemplate), events);
+const contacts = new ContactsForm(cloneTemplate(contactsTemplate), events);
 
 // Изменились элементы каталога
 events.on<CatalogChangeEvent>('items:changed', () => {
