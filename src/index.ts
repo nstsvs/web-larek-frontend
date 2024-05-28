@@ -196,13 +196,13 @@ events.on(AppEvents.ContactsSubmit, () => {
 	api
 		.orderProducts(appData.order)
 		.then((res) => {
-			appData.clearBasket();
 			page.counter = appData.basket.length;
 			modal.render({
 				content: success.render({
 					total: appData.getTotal(),
 				}),
 			});
+			appData.clearBasket();
 			events.emit(AppEvents.OrderSuccess, res);
 		})
 		.catch(console.error);

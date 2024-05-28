@@ -48,7 +48,7 @@ export class AppState extends Model<IAppState> {
 	}
 
 	getTotal(): number {
-		return this.basket.reduce((a, c) => a + c.price, 0);
+		return this.basket.reduce((sum, item) => sum + item.price, 0);
 	}
 
 	setCatalog(products: IProduct[]) {
