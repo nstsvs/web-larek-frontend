@@ -2,6 +2,7 @@ import { Component } from './base/Component';
 import { createElement, ensureElement } from '../utils/utils';
 import { EventEmitter } from './base/Events';
 import { IBasket } from '../types';
+import { AppEvents } from '../utils/enums';
 
 export class Basket extends Component<IBasket> {
 	protected _list: HTMLElement;
@@ -17,7 +18,7 @@ export class Basket extends Component<IBasket> {
 
 		if (this._button) {
 			this._button.addEventListener('click', () => {
-				events.emit('order:open');
+				events.emit(AppEvents.OrderOpened);
 			});
 		}
 

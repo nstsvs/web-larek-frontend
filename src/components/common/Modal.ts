@@ -2,6 +2,7 @@ import { Component } from '../base/Component';
 import { ensureElement } from '../../utils/utils';
 import { IEvents } from '../base/Events';
 import { IModal } from '../../types';
+import { AppEvents } from '../../utils/enums';
 
 export class Modal extends Component<IModal> {
 	protected _closeButton: HTMLButtonElement;
@@ -36,14 +37,14 @@ export class Modal extends Component<IModal> {
 	open() {
 		this._toggleModal();
 		document.addEventListener('keydown', this._handleEscape);
-		this.events.emit('modal:open');
+		this.events.emit(AppEvents.ModalOpened);
 	}
 
 	close() {
 		this._toggleModal(false);
 		document.removeEventListener('keydown', this._handleEscape);
 		this.content = null;
-		this.events.emit('modal:close');
+		this.events.emit(AppEvents.ModalClosed);
 	}
 
 	render(data: IModal): HTMLElement {
