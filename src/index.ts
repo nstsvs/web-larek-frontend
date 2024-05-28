@@ -138,7 +138,6 @@ events.on(AppEvents.BasketChange, () => {
 
 // Открытие модального окна с адресом
 events.on(AppEvents.OrderOpen, () => {
-	console.log('OrderOpened event received');
 	modal.render({
 		content: order.render({
 			payment: '',
@@ -151,7 +150,6 @@ events.on(AppEvents.OrderOpen, () => {
 
 // Открытие модального окна с контактными данными
 events.on(AppEvents.OrderSubmit, () => {
-	console.log('OrderSubmitted event received');
 	modal.render({
 		content: contacts.render({
 			phone: '',
